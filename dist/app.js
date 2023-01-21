@@ -33,6 +33,8 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const config_1 = __importDefault(require("./db/config"));
 const grant_routes_1 = require("./routes/grant.routes");
+const users_routes_1 = require("./routes/users.routes");
+const commisions_routes_1 = require("./routes/commisions.routes");
 dotenv.config();
 const app = (0, express_1.default)();
 app.set("port", process.env.PORT || 3000);
@@ -44,7 +46,9 @@ app.use(body_parser_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 //Rutas
+app.use(users_routes_1.usersRouter);
 app.use(grant_routes_1.grantRouter);
+app.use(commisions_routes_1.commisionsRouter);
 //Cors
 app.listen(app.get("port"), () => {
     console.log(`Server listening on port ${app.get("port")}`);

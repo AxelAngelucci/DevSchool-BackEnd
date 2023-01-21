@@ -3,7 +3,7 @@ import { serverError, notFoundError } from "../helpers/jsonErrors.js";
 import { CommisionI } from "../interfaces/commision.interface.js";
 import Comissions from "../models/Comissions.js";
 
-const setComission = async (req: Request, res: Response) => {
+export const setComission = async (req: Request, res: Response) => {
   const { ...payload } = req.body;
   try {
     await Comissions.create(payload);
@@ -13,7 +13,7 @@ const setComission = async (req: Request, res: Response) => {
   }
 };
 
-const getAllComissions = async (req: Request, res: Response) => {
+export const getAllComissions = async (req: Request, res: Response) => {
   try {
     const commisions: CommisionI[] = await Comissions.find();
     res.status(201).json({ ...commisions });
@@ -22,7 +22,7 @@ const getAllComissions = async (req: Request, res: Response) => {
   }
 };
 
-const getCommisionByID = async (req: Request, res: Response) => {
+export const getCommisionByID = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const commision: CommisionI = await Comissions.findOne({ _id: id });
@@ -32,7 +32,7 @@ const getCommisionByID = async (req: Request, res: Response) => {
   }
 };
 
-const deleteCommisionByID = async (req: Request, res: Response) => {
+export const deleteCommisionByID = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await Comissions.findOneAndDelete({ _id: id });
@@ -44,7 +44,7 @@ const deleteCommisionByID = async (req: Request, res: Response) => {
   }
 };
 
-const putComissionByID = async (req: Request, res: Response) => {
+export const putComissionByID = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { ...payload } = req.body;
   try {
@@ -61,12 +61,4 @@ const putComissionByID = async (req: Request, res: Response) => {
   } catch (e) {
     return serverError(res, e);
   }
-};
-
-export {
-  setComission,
-  getAllComissions,
-  getCommisionByID,
-  deleteCommisionByID,
-  putComissionByID,
 };
