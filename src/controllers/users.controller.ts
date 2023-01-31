@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
-import { serverError, notFoundError } from "../helpers/jsonErrors.js";
-import { UserRequestI, UserResponseI } from "../interfaces/user.interface.js";
-import Users from "../models/Users.js";
+import { serverError, notFoundError } from "../helpers/jsonErrors";
+import { UserRequestI, UserResponseI } from "../interfaces/user.interface";
+import Users from "../models/Users";
+import { hashPass } from "../helpers/passEncrypt";
+import { generatedPass } from "../helpers/generatePassword";
+
 
 export const newUser = async (req: Request, res: Response) => {
     const { ...payload }: UserRequestI = req.body;
     try {
+        payload.password = hashPass(generatedPass);
         await Users.create(payload);
         res.status(201).json({ message: "User Created" });
     } catch (e) {

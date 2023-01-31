@@ -24,12 +24,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.showUserInTable = exports.deleteUserByID = exports.putUserByID = exports.getUserByID = exports.getAllUsers = exports.newUser = void 0;
-const jsonErrors_js_1 = require("../helpers/jsonErrors.js");
-const Users_js_1 = __importDefault(require("../models/Users.js"));
+const jsonErrors_1 = require("../helpers/jsonErrors");
+const Users_1 = __importDefault(require("../models/Users"));
+const passEncrypt_1 = require("../helpers/passEncrypt");
+const generatePassword_1 = require("../helpers/generatePassword");
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = __rest(req.body, []);
     try {
-        yield Users_js_1.default.create(payload);
+        payload.password = (0, passEncrypt_1.hashPass)(generatePassword_1.generatedPass);
+        yield Users_1.default.create(payload);
         res.status(201).json({ message: "User Created" });
     }
     catch (e) {
@@ -39,22 +42,22 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.newUser = newUser;
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield Users_js_1.default.find();
+        const users = yield Users_1.default.find();
         res.status(201).json(Object.assign({}, users));
     }
     catch (e) {
-        return (0, jsonErrors_js_1.serverError)(res, e);
+        return (0, jsonErrors_1.serverError)(res, e);
     }
 });
 exports.getAllUsers = getAllUsers;
 const getUserByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const user = yield Users_js_1.default.findOne({ _id: id });
+        const user = yield Users_1.default.findOne({ _id: id });
         res.status(200).json(Object.assign({}, user));
     }
     catch (e) {
-        (0, jsonErrors_js_1.serverError)(res, e);
+        (0, jsonErrors_1.serverError)(res, e);
     }
 });
 exports.getUserByID = getUserByID;
@@ -62,9 +65,9 @@ const putUserByID = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const { id } = req.params;
     const payload = __rest(req.body, []);
     try {
-        const user = yield Users_js_1.default.findOneAndUpdate({ _id: id }, payload);
+        const user = yield Users_1.default.findOneAndUpdate({ _id: id }, payload);
         if (!user)
-            return (0, jsonErrors_js_1.notFoundError)(res, "User");
+            return (0, jsonErrors_1.notFoundError)(res, "User");
         return res.status(200).json({
             message: `User with id ${id} has been updated`,
             id: user._id,
@@ -72,20 +75,20 @@ const putUserByID = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (e) {
-        return (0, jsonErrors_js_1.serverError)(res, e);
+        return (0, jsonErrors_1.serverError)(res, e);
     }
 });
 exports.putUserByID = putUserByID;
 const deleteUserByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        yield Users_js_1.default.findOneAndDelete({ _id: id });
+        yield Users_1.default.findOneAndDelete({ _id: id });
         res
             .status(200)
             .json({ message: `User with ID ${id} has been deleted` });
     }
     catch (e) {
-        (0, jsonErrors_js_1.serverError)(res, e);
+        (0, jsonErrors_1.serverError)(res, e);
     }
     ;
 });
@@ -93,14 +96,14 @@ exports.deleteUserByID = deleteUserByID;
 const showUserInTable = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const user = yield Users_js_1.default.findOne({ _id: id });
+        const user = yield Users_1.default.findOne({ _id: id });
         if (!user)
-            return (0, jsonErrors_js_1.notFoundError)(res, "User");
-        yield Users_js_1.default.findByIdAndUpdate({ _id: id }, { showInTable: !user.showInTable });
+            return (0, jsonErrors_1.notFoundError)(res, "User");
+        yield Users_1.default.findByIdAndUpdate({ _id: id }, { showInTable: !user.showInTable });
         res.status(200).json({ message: `User with ID ${id} has been updated` });
     }
     catch (e) {
-        (0, jsonErrors_js_1.serverError)(res, e);
+        (0, jsonErrors_1.serverError)(res, e);
     }
     ;
 });
