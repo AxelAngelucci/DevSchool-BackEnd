@@ -7,6 +7,7 @@ import db from "./db/config";
 import { grantRouter } from "./routes/grant.routes";
 import { usersRouter } from "./routes/users.routes";
 import { commisionsRouter } from "./routes/commisions.routes";
+import { sendMail } from "./utils/mailer";
 
 dotenv.config();
 const app = express();
@@ -30,3 +31,4 @@ app.use(commisionsRouter);
 app.listen(app.get("port"), () => {
   console.log(`Server listening on port ${app.get("port")}`);
 });
+

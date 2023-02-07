@@ -28,11 +28,14 @@ const jsonErrors_1 = require("../helpers/jsonErrors");
 const Users_1 = __importDefault(require("../models/Users"));
 const passEncrypt_1 = require("../helpers/passEncrypt");
 const generatePassword_1 = require("../helpers/generatePassword");
+const mailer_1 = require("../utils/mailer");
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = __rest(req.body, []);
+    const pass = generatePassword_1.generatedPass;
     try {
-        payload.password = (0, passEncrypt_1.hashPass)(generatePassword_1.generatedPass);
+        payload.password = (0, passEncrypt_1.hashPass)(pass);
         yield Users_1.default.create(payload);
+        yield (0, mailer_1.sendMail)(payload.email, "Ya tienes tu usuario en DevSchool Adademia!", `Hola ${payload.name}! Estamos muy contentos de que nos hayas elegido, tu usuario para el campus es ${payload.email} y tu contraseña es ${pass}, por supuesto, puedes cambiar estos datos cuando lo desees`);
         res.status(201).json({ message: "User Created" });
     }
     catch (e) {

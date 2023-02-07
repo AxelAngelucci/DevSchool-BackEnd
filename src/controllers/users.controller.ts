@@ -4,13 +4,16 @@ import { UserRequestI, UserResponseI } from "../interfaces/user.interface";
 import Users from "../models/Users";
 import { hashPass } from "../helpers/passEncrypt";
 import { generatedPass } from "../helpers/generatePassword";
+import { sendMail } from "../utils/mailer";
 
 
 export const newUser = async (req: Request, res: Response) => {
     const { ...payload }: UserRequestI = req.body;
+    const pass = generatedPass;
     try {
-        payload.password = hashPass(generatedPass);
+        payload.password = hashPass(pass);
         await Users.create(payload);
+        await sendMail(payload.email, "Ya tienes tu usuario en DevSchool Adademia!", `Hola ${payload.name}! Estamos muy contentos de que nos hayas elegido. \n Tu usuario para el campus es: ${payload.email} y tu contraseña es: ${pass}. \n Por supuesto, puedes cambiar estos datos cuando lo desees`);
         res.status(201).json({ message: "User Created" });
     } catch (e) {
         return res.status(400).json({ message: "User Not Created", error: e });
