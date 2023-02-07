@@ -17,25 +17,6 @@ const Lesson = new Schema({
     description: String
 });
 
-const Class = new Schema({
-    link: {
-        type: String,
-        required: [true, "The url is required"]
-    },
-    title: {
-        type: String,
-        required: [true, "The title is required"],
-    },
-    date: {
-        type: String,
-        required: [true, "The Date is required"],
-    },
-    number: {
-        type: Number,
-        required: [true, "The Class Number is required"]
-    }
-});
-
 const ModuleTeory = new Schema({
     name: {
         type: String,
@@ -43,14 +24,6 @@ const ModuleTeory = new Schema({
     },
     lessons: [Lesson]
 });
-
-const ModuleClasses = new Schema({
-    name: {
-        type: String,
-        required: [true, "The module name is required"]
-    },
-    classes: [Class]
-})
 
 
 
